@@ -92,4 +92,9 @@ public class DocumentationColumn {
         this.label = value;
     }
 
+	@Override
+	public String toString() {
+		return "DocumentationColumn [description=" + description + ", label=" + label + "]";
+	}
+
 }

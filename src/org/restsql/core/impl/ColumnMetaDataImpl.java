@@ -428,4 +428,18 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 	protected int getColumnType(final int columnType, final String columnTypeName) {
 		return columnType;
 	}
+
+	@Override
+	public String toString() {
+		return "ColumnMetaDataImpl [columnLabel=" + columnLabel + ", columnName=" + columnName
+				+ ", columnNumber=" + columnNumber + ", columnType=" + columnType + ", columnTypeName="
+				+ columnTypeName + ", databaseName=" + databaseName + ", nonqueriedForeignKey="
+				+ nonqueriedForeignKey + ", primaryKey=" + primaryKey + ", qualifiedColumnLabel="
+				+ qualifiedColumnLabel + ", qualifiedColumnName=" + qualifiedColumnName
+				+ ", qualifiedTableName=" + qualifiedTableName + ", readOnly=" + readOnly + ", sequence="
+				+ sequence + ", sequenceName=" + sequenceName + ", tableName=" + tableName + ", tableRole="
+				+ tableRole + "]";
+	}
+	
+
 }

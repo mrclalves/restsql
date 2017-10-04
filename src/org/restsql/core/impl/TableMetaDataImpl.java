@@ -180,4 +180,11 @@ public class TableMetaDataImpl implements TableMetaData {
 	public void setTableAlias(final String tableAlias) {
 		rowAlias = tableAlias;
 	}
+
+	@Override
+	public String toString() {
+		return "TableMetaDataImpl [columnList=" + columnList + ", databaseName=" + databaseName
+				+ ", qualifiedTableName=" + qualifiedTableName + ", tableName=" + tableName + ", tableRole="
+				+ tableRole + "]";
+	}
 }

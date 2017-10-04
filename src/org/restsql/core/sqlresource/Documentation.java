@@ -118,4 +118,9 @@ public class Documentation {
         this.examples = value;
     }
 
+	@Override
+	public String toString() {
+		return "Documentation [resource=" + resource + ", columns=" + columns + "]";
+	}
+
 }

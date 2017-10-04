@@ -26,6 +26,7 @@ public class Config {
 	public static final String DEFAULT_DATABASE_PASSWORD = "root";
 	public static final String DEFAULT_DATABASE_URL = "jdbc:mysql://localhost:3306/";
 	public static final String DEFAULT_DATABASE_USER = "root";
+	public static final String DEFAULT_DATABASE_SQL_PING = "SELECT 1";
 	public static final String DEFAULT_HTTP_CACHE_CONTROL = "no-cache, no-transform";
 	public static final String DEFAULT_HTTP_REQUEST_ATTRIBUTES = "org.restsql.core.impl.HttpRequestAttributesImpl";
 	public static final String DEFAULT_JAVA_LOGGING_CONFIG = "resources/properties/default-logging.properties";
@@ -62,6 +63,7 @@ public class Config {
 	public static final String KEY_DATABASE_PASSWORD = "database.password";
 	public static final String KEY_DATABASE_URL = "database.url";
 	public static final String KEY_DATABASE_USER = "database.user";
+	public static final String KEY_DATABASE_SQL_PING = "database.sql.ping";
 	public static final String KEY_HTTP_CACHE_CONTROL = "http.response.cacheControl";
 	public static final String KEY_HTTP_REQUEST_ATTRIBUTES = "org.restsql.core.HttpRequestAttributes";
 	public static final String KEY_JAVA_LOGGING_CONFIG = "java.util.logging.config.file";

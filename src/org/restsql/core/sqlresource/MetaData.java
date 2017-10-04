@@ -101,4 +101,9 @@ public class MetaData {
         return this.table;
     }
 
+	@Override
+	public String toString() {
+		return "MetaData [database=" + database + ", table=" + table + "]";
+	}
+
 }

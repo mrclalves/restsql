@@ -1,0 +1,22 @@
+<jboss-deployment-structure>
+
+	<deployment>
+		<exclude-subsystems>
+<!-- 			<subsystem name="jaxrs" /> -->
+<!-- 			<subsystem name="resteasy" /> -->
+<!-- 			<subsystem name="webservices" /> -->
+		</exclude-subsystems>
+		<exclusions>
+		</exclusions>
+		<dependencies>
+			<module name="javax.xml.bind.api" />
+            <module name="javaee.api" />
+            <module name="javax.ws.rs.api"/>
+            <module name="org.jboss.resteasy.resteasy-jaxrs" />
+			<module name="sun.jdk" />
+			<module name="deployment.restsql.war" />
+		</dependencies>
+		
+		        <local-last value="true" />
+	</deployment>
+</jboss-deployment-structure>

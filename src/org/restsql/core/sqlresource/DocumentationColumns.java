@@ -71,4 +71,9 @@ public class DocumentationColumns {
         return this.column;
     }
 
+	@Override
+	public String toString() {
+		return "DocumentationColumns [column=" + column + "]";
+	}
+
 }

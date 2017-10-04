@@ -463,4 +463,9 @@ public class SqlResourceImpl implements SqlResource {
 	private String getChildRowsName() {
 		return metaData.getChild().getRowSetAlias();
 	}
+
+	@Override
+	public String toString() {
+		return "SqlResourceImpl [name=" + name + "]";
+	}
 }

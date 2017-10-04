@@ -96,6 +96,14 @@ public interface SqlBuilder {
 		public boolean isClauseEmpty() {
 			return clause.length() == 0;
 		}
+
+		@Override
+		public String toString() {
+			return "SqlStruct [clause=" + clause + ", main=" + main + ", preparedClause=" + preparedClause
+					+ ", preparedMain=" + preparedMain + ", preparedValues=" + preparedValues + "]";
+		}
+		
+		
 	}
 
 }

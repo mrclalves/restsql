@@ -64,4 +64,9 @@ public class DocumentationResource {
         this.description = value;
     }
 
+	@Override
+	public String toString() {
+		return "DocumentationResource [description=" + description + "]";
+	}
+
 }

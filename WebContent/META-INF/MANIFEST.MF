@@ -1,0 +1,1 @@
+Dependencies: com.sun.xml.bind, javax.xml.bind.api, sun.jdk services export

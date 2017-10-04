@@ -780,4 +780,11 @@ public abstract class AbstractSqlResourceMetaData implements SqlResourceMetaData
 			return null;
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "AbstractSqlResourceMetaData [childTable=" + childTable + ", childTableName=" + childTableName
+				+ ", parentTable=" + parentTable + ", parentTableName=" + parentTableName + ", resName="
+				+ resName + ", tables=" + tables + "]";
+	}
 }

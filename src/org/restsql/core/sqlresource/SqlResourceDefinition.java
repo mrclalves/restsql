@@ -185,4 +185,10 @@ public class SqlResourceDefinition {
         this.documentation = value;
     }
 
+	@Override
+	public String toString() {
+		return "SqlResourceDefinition [metadata=" + metadata + ", validatedAttribute=" + validatedAttribute
+				+ ", documentation=" + documentation + "]";
+	}
+
 }

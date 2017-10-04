@@ -259,4 +259,11 @@ public class ValidatedAttribute {
         this.validatorClass = value;
     }
 
+	@Override
+	public String toString() {
+		return "ValidatedAttribute [name=" + name + ", type=" + type + ", minLength=" + minLength
+				+ ", maxLength=" + maxLength + ", regex=" + regex + ", minValue=" + minValue + ", maxValue="
+				+ maxValue + ", validatorClass=" + validatorClass + "]";
+	}
+
 }

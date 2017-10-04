@@ -20,8 +20,9 @@ public class DatabaseConnectionHealthCheck extends HealthCheck {
 	protected Result check() throws Exception {
 		Connection connection = null;
 		try {
+			String sqlPing = Config.properties.getProperty(Config.KEY_DATABASE_SQL_PING, Config.DEFAULT_DATABASE_SQL_PING); 
 			connection = Factory.getConnection(null);
-			PreparedStatement statement = connection.prepareStatement("SELECT 1");
+			PreparedStatement statement = connection.prepareStatement(sqlPing);
 			statement.executeQuery();
 			return Result.healthy();
 		} catch (SQLException exception) {
