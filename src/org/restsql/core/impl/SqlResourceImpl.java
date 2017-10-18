@@ -412,19 +412,30 @@ public class SqlResourceImpl implements SqlResource {
 
 			for (final TableMetaData table : tables) {
 				addRequestParamsToResponseValues(request, responseValues, table);
-
-				// Find columns missing from the request params that are sequences and request the current value
-				for (final ColumnMetaData column : table.getColumns().values()) {
-					if (!request.hasParameter(column.getColumnLabel()) && column.isSequence()) {
-						final int value = Factory.getSequenceManager().getCurrentValue(connection,
-								column.getSequenceName());
-						responseValues.add(new ResponseValue(column.getColumnLabel(), new Integer(value),
-								column.getColumnNumber()));
-					}
-				}
+				addSequenceInPkColumn(connection, request, responseValues, table);
 			}
 		}
 		return rowsAffected;
+	}
+
+	/**
+	 * Add next sequence in primaryKey column 
+	 * @param connection
+	 * @param request
+	 * @param responseValues
+	 * @param table
+	 * @throws SqlResourceException
+	 */
+	private void addSequenceInPkColumn(final Connection connection, final Request request,
+			final Set<ResponseValue> responseValues, final TableMetaData table) throws SqlResourceException {
+		// Find columns missing from the request params that are sequences and request the current value
+		for (final ColumnMetaData column : table.getColumns().values()) {
+			if (!request.hasParameter(column.getColumnLabel()) && column.isSequence()) {
+				final int value = Factory.getSequenceManager().getCurrentValue(connection, column.getSequenceName());
+				responseValues.add(new ResponseValue(column.getColumnLabel(), new Integer(value),
+						column.getColumnNumber()));
+			}
+		}
 	}
 
 	private int execWrite(final Connection connection, final Request request, final SqlStruct sqlStruct,
