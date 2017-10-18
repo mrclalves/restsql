@@ -111,6 +111,14 @@ public class ObjectFactory {
     public Table createTable() {
         return new Table();
     }
+    
+    /**
+     * Create an instance of {@link Column }
+     * 
+     */
+    public Column createColumn() {
+    	return new Column();
+    }
 
     /**
      * Create an instance of {@link ValidatedAttribute }
@@ -182,6 +190,14 @@ public class ObjectFactory {
      */
     public DocumentationResponse createDocumentationResponse() {
         return new DocumentationResponse();
+    }
+    
+    /**
+     * Create an instance of {@link Sequence }
+     * 
+     */
+    public Sequence createSequence() {
+    	return new Sequence();
     }
 
     /**

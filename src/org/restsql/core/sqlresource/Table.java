@@ -8,9 +8,13 @@
 
 package org.restsql.core.sqlresource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -23,6 +27,9 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="Table">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *		 &lt;sequence>
+ *			&lt;element name="columns" type="{http://restsql.org/schema}Column" maxOccurs="unbounded"></element>
+ *		 &lt;/sequence>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="alias" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="rowAlias" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -46,7 +53,9 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Table")
+@XmlType(name = "Table", propOrder = {
+	    "columns"
+	})
 public class Table {
 
     @XmlAttribute(name = "name", required = true)
@@ -59,7 +68,11 @@ public class Table {
     protected String rowSetAlias;
     @XmlAttribute(name = "role", required = true)
     protected String role;
-
+    
+    @XmlElement(name = "columndef")
+    protected List<Column> columns;
+    
+    
     /**
      * Gets the value of the name property.
      * 
@@ -179,5 +192,44 @@ public class Table {
     public void setRole(String value) {
         this.role = value;
     }
+
+    /**
+     * Gets the value of the columns property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the columns property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getColumns().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Column }
+     * 
+     * 
+     */
+	public List<Column> getColumns() {
+		if (this.columns == null) {
+			this.columns = new ArrayList<Column>();
+		}
+		return this.columns;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Table [name=" + name + ", alias=" + alias + ", rowAlias=" + rowAlias + ", rowSetAlias="
+				+ rowSetAlias + ", role=" + role + ", columns=" + columns + "]";
+	}
+
 
 }

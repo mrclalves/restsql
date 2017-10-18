@@ -49,8 +49,12 @@
 
 	<complexType name="MetaData">
 		<sequence>
-			<element name="database" type="rs:Database" maxOccurs="1" minOccurs="1"></element>
-			<element name="table" type="rs:Table" maxOccurs="unbounded" minOccurs="1"></element>
+			<element name="database" type="rs:Database" maxOccurs="1"
+				minOccurs="1">
+			</element>
+			<element name="table" type="rs:Table" maxOccurs="unbounded"
+				minOccurs="1">
+			</element>
 		</sequence>
 	</complexType>
 
@@ -62,6 +66,11 @@
 	</complexType>
 
 	<complexType name="Table">
+		<sequence>
+			<element name="columndef" type="rs:ColumnDef"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+		</sequence>
 		<attribute name="name" type="string" use="required"></attribute>
 		<attribute name="alias" type="string" use="optional"></attribute>
 		<attribute name="role" use="required">
@@ -76,4 +85,24 @@
 			</simpleType>
 		</attribute>
 	</complexType>
+
+	<complexType name="Sequence">
+		<attribute name="name" type="string" use="required">
+			<annotation>
+				<documentation>Name of squence when used.</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+
+	<complexType name="ColumnDef">
+		<sequence>
+			<element name="sequence" type="rs:Sequence" maxOccurs="1"
+				minOccurs="0">
+			</element>
+		</sequence>
+		<attribute name="name" type="string"></attribute>
+		<attribute name="lable" type="string"></attribute>
+		<attribute name="primaryKey" type="boolean"></attribute>
+	</complexType>
+
 </schema>
