@@ -585,8 +585,8 @@ public abstract class AbstractSqlResourceMetaData implements SqlResourceMetaData
 				while (resultSet.next()) {
 					final String columnName = resultSet.getString(1);
 					for (final ColumnMetaData column : table.getColumns().values()) {
-						if (columnName.equalsIgnoreCase(column.getColumnName())) { // ignore case accommodates a db like
-							// Oracle
+						// ignore case accommodates a db like sOracle
+						if (columnName.equalsIgnoreCase(column.getColumnName())) { 
 							((ColumnMetaDataImpl) column).setPrimaryKey(true);
 							((TableMetaDataImpl) table).addPrimaryKey(column);
 						}
@@ -610,7 +610,7 @@ public abstract class AbstractSqlResourceMetaData implements SqlResourceMetaData
 	 * @param connection database connection
 	 * @throws SQLException if a database access error occurs
 	 */
-	private void buildSequenceMetaData(final Connection connection) throws SQLException {
+	protected void buildSequenceMetaData(final Connection connection) throws SQLException {
 
 		final PreparedStatement statement = connection.prepareStatement(getSqlColumnsQuery());
 		ResultSet resultSet = null;
@@ -624,8 +624,8 @@ public abstract class AbstractSqlResourceMetaData implements SqlResourceMetaData
 				while (resultSet.next()) {
 					final String columnName = resultSet.getString(1);
 					for (final ColumnMetaData column : table.getColumns().values()) {
-						if (column.getColumnName().equalsIgnoreCase(columnName)) { // ignore case accommodates a db like
-							// Oracle
+						// ignore case accommodates a db like Oracle
+						if (column.getColumnName().equalsIgnoreCase(columnName)) { 
 							setSequenceMetaData((ColumnMetaDataImpl) column, resultSet);
 							break;
 						}
@@ -703,7 +703,7 @@ public abstract class AbstractSqlResourceMetaData implements SqlResourceMetaData
 				tableMap.put(column.getQualifiedTableName(), table);
 				tables.add(table);
 				table.setAliases(tableDef.getAlias(), tableDef.getRowAlias(), tableDef.getRowSetAlias());
-
+				
 				switch (table.getTableRole()) {
 					case Parent:
 						parentTable = table;
@@ -786,5 +786,10 @@ public abstract class AbstractSqlResourceMetaData implements SqlResourceMetaData
 		return "AbstractSqlResourceMetaData [childTable=" + childTable + ", childTableName=" + childTableName
 				+ ", parentTable=" + parentTable + ", parentTableName=" + parentTableName + ", resName="
 				+ resName + ", tables=" + tables + "]";
+	}
+
+	@XmlTransient
+	protected SqlResourceDefinition getDefinition() {
+		return this.definition;
 	}
 }
