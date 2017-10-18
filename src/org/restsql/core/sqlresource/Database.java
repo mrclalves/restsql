@@ -62,4 +62,12 @@ public class Database {
         this._default = value;
     }
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Database [_default=" + this._default + "]";
+	}
+
 }
