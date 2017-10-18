@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.restsql.core.impl.AbstractSqlResourceMetaData;
 import org.restsql.core.impl.ColumnMetaDataImpl;
+import org.restsql.core.sqlresource.Column;
 import org.restsql.core.sqlresource.SqlResourceDefinition;
 import org.restsql.core.sqlresource.SqlResourceDefinitionUtils;
+import org.restsql.core.sqlresource.Table;
 
 public class OracleSqlResourceMetaData extends AbstractSqlResourceMetaData {
 
@@ -68,7 +71,7 @@ public class OracleSqlResourceMetaData extends AbstractSqlResourceMetaData {
 	@Override
 	protected String getQualifiedTableName(final SqlResourceDefinition definition,
 			final ResultSetMetaData resultSetMetaData, final int colNumber) throws SQLException {
-		return definition.getMetadata().getTable().get(0).getName();
+		return definition.getMetadata().getDatabase().getDefault() + "." + definition.getMetadata().getTable().get(0).getName();
 	}
 
 	/** Retrieves database-specific table name used in SQL statements. Used to build join table meta data. */
@@ -101,10 +104,14 @@ public class OracleSqlResourceMetaData extends AbstractSqlResourceMetaData {
 	 */
 	@Override
 	protected void setSequenceMetaData(ColumnMetaDataImpl column, ResultSet resultSet) throws SQLException {
-		final String columnDefault = resultSet.getString(3);
-		if (columnDefault != null && columnDefault.startsWith("nextval")) {
-			column.setSequence(true);
-			column.setSequenceName(columnDefault.substring(9, columnDefault.indexOf('\'', 10)));
+		List<Table> tables = getDefinition().getMetadata().getTable();
+		for (Table table : tables) {
+			for (Column columnDef : table.getColumns()) {
+				if (column.getColumnName().equals(columnDef.getName())) {
+					column.setSequence(true);
+					column.setSequenceName(columnDef.getSequence().getName());
+				}
+			}
 		}
 	}
 
