@@ -16,6 +16,11 @@ public class OracleSequenceManager extends AbstractSequenceManager {
 	public String getCurrentValueSql(String sequenceName) {
 		return "SELECT " + sequenceName + ".CURRVAL FROM DUAL";
 	}
+	
+	@Override
+	protected String getNextValueSql(String sequenceName) {
+		return "SELECT " + sequenceName + ".NEXTVAL FROM DUAL";
+	}
 
 	@Override
 	public void setNextValue(final Connection connection, final String table, final String sequenceName,

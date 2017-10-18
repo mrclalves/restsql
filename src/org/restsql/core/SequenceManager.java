@@ -17,4 +17,6 @@ public interface SequenceManager {
 	public void setNextValue(final Connection connection, final String table, final String sequenceName,
 			final int nextval, boolean printAction) throws SqlResourceException;
 
+	/** Retrieves next sequence value. */
+	public long getNextValue(final Connection connection, String sequenceName) throws SqlResourceException;
 }
