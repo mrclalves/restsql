@@ -24,7 +24,7 @@ import org.restsql.core.TableMetaData;
 
 public abstract class AbstractSqlBuilder implements SqlBuilder {
 	private static final int DEFAULT_DELETE_SIZE = 100;
-	private static final int DEFAULT_INSERT_SIZE = 300;
+	protected static final int DEFAULT_INSERT_SIZE = 300;
 	private static final int DEFAULT_SELECT_SIZE = 300;
 	private static final int DEFAULT_UPDATE_SIZE = 300;
 
@@ -188,7 +188,7 @@ public abstract class AbstractSqlBuilder implements SqlBuilder {
 	 * @return map of sql struct, per table
 	 * @throws InvalidRequestException if a database access error occurs
 	 */
-	private Map<String, SqlStruct> buildInsertSql(final SqlResourceMetaData metaData, final Request request,
+	protected Map<String, SqlStruct> buildInsertSql(final SqlResourceMetaData metaData, final Request request,
 			final boolean doParent) throws InvalidRequestException {
 
 		final Map<String, SqlStruct> sqls = new HashMap<String, SqlStruct>(metaData.getNumberTables());
