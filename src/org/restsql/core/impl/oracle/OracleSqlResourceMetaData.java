@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.restsql.core.impl.AbstractSqlResourceMetaData;
 import org.restsql.core.impl.ColumnMetaDataImpl;
+import org.restsql.core.impl.serial.ConvertFromat;
 import org.restsql.core.sqlresource.Column;
 import org.restsql.core.sqlresource.SqlResourceDefinition;
 import org.restsql.core.sqlresource.SqlResourceDefinitionUtils;
@@ -28,6 +29,17 @@ public class OracleSqlResourceMetaData extends AbstractSqlResourceMetaData {
 	protected String getColumnDatabaseName(final SqlResourceDefinition definition,
 			final ResultSetMetaData resultSetMetaData, final int colNumber) throws SQLException {
 		return SqlResourceDefinitionUtils.getDefaultDatabase(definition);
+	}
+	
+	/**
+	 * Retrieves actual column label from result set meta data. Hook method for buildTablesAndColumns() allows
+	 * database-specific overrides.
+	 */
+	@Override
+	protected String getColumnLabel(final SqlResourceDefinition definition,
+			final ResultSetMetaData resultSetMetaData, final int colNumber) throws SQLException {
+		String columnLabel = resultSetMetaData.getColumnLabel(colNumber);
+		return ConvertFromat.snakeCaseToCamelCase(columnLabel);
 	}
 
 	/**
@@ -94,7 +106,7 @@ public class OracleSqlResourceMetaData extends AbstractSqlResourceMetaData {
 	 */
 	@Override
 	protected boolean isDbMetaDataUpperCase() {
-		return true;
+		return false;
 	}
 	/**
 	 * Sets sequence metadata for a column with the columns query result set. The column_default column will contain a
