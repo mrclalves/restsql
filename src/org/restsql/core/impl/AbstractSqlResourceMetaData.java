@@ -336,6 +336,15 @@ public abstract class AbstractSqlResourceMetaData implements SqlResourceMetaData
 	}
 
 	/**
+	 * Retrieves actual column label from result set meta data. Hook method for buildTablesAndColumns() allows
+	 * database-specific overrides.
+	 */
+	protected String getColumnLabel(final SqlResourceDefinition definition,
+			final ResultSetMetaData resultSetMetaData, final int colNumber) throws SQLException {
+		return resultSetMetaData.getColumnLabel(colNumber);
+	}
+
+	/**
 	 * Retrieves table name from result set meta data. Hook method for buildTablesAndColumns() allows database-specific
 	 * overrides.
 	 */
@@ -681,7 +690,7 @@ public abstract class AbstractSqlResourceMetaData implements SqlResourceMetaData
 			}
 
 			final String columnName = getColumnName(definition, resultSetMetaData, colNumber);
-			final String columnLabel = resultSetMetaData.getColumnLabel(colNumber);
+			final String columnLabel = getColumnLabel(definition, resultSetMetaData, colNumber);
 			final ColumnMetaData column = Factory.getColumnMetaData();
 			column.setAttributes(colNumber, databaseName, qualifiedTableName, tableName, columnName,
 					getQualifiedColumnName(tableName, qualifiedTableName, readOnly, columnName), columnLabel,
@@ -748,7 +757,7 @@ public abstract class AbstractSqlResourceMetaData implements SqlResourceMetaData
 		// Determine number of databases
 		multipleDatabases = databases.size() > 1;
 	}
-
+	
 	private List<String> getQualifiedColumnNames(final List<ColumnMetaData> columns) {
 		if (columns != null) {
 			final List<String> names = new ArrayList<String>(columns.size());
