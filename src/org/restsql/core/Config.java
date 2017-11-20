@@ -22,6 +22,7 @@ public class Config {
 	public static final String DEFAULT_AUTHORIZER = "org.restsql.security.impl.AuthorizerImpl";
 	public static final String DEFAULT_COLUMN_METADATA = "org.restsql.core.impl.mysql.MySqlColumnMetaData";
 	public static final String DEFAULT_CONNECTION_FACTORY = "org.restsql.core.impl.ConnectionFactoryImpl";
+	public static final String DEFAULT_DATABASE_DATASOURCE = "java:comp/env/DS";
 	public static final String DEFAULT_DATABASE_DRIVER_CLASSNAME = "com.mysql.jdbc.Driver";
 	public static final String DEFAULT_DATABASE_PASSWORD = "root";
 	public static final String DEFAULT_DATABASE_URL = "jdbc:mysql://localhost:3306/";
@@ -58,7 +59,8 @@ public class Config {
 
 	public static final String KEY_AUTHORIZER = "org.restsql.security.Authorizer";
 	public static final String KEY_COLUMN_METADATA = "org.restsql.core.ColumnMetaData";
-	public static final String KEY_CONNECTION_FACTORY = "org.restsql.core.Factory.Connection";
+	public static final String KEY_CONNECTION_FACTORY = "org.restsql.core.Factory.ConnectionFactory";
+	public static final String KEY_DATABASE_DATASOURCE = "database.dataSource";
 	public static final String KEY_DATABASE_DRIVER_CLASSNAME = "database.driverClassName";
 	public static final String KEY_DATABASE_PASSWORD = "database.password";
 	public static final String KEY_DATABASE_URL = "database.url";

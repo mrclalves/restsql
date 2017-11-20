@@ -3,7 +3,6 @@ package org.restsql.core.impl;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -19,15 +18,12 @@ import org.restsql.core.Factory.ConnectionFactory;
  * @author modify by marcelo.alves
  */
 public class ConnectionPoolFactoryImpl implements ConnectionFactory {
-	private final String connectionName;
 	private final String lookupName;
 	
-	private Context envCtxA;
     private DataSource dataSource;
 
 	public ConnectionPoolFactoryImpl() {
-		this.connectionName = Config.properties.getProperty("database.pool","DEFAULT");
-		this.lookupName = Config.properties.getProperty("database.lookup","java:comp/env");
+		this.lookupName = Config.properties.getProperty(Config.KEY_DATABASE_DATASOURCE,Config.DEFAULT_DATABASE_DATASOURCE);
 	}
 
 	public Connection getConnection(String defaultDatabase) throws SQLException {
@@ -35,7 +31,8 @@ public class ConnectionPoolFactoryImpl implements ConnectionFactory {
 		try {
 			connection = getDataSource().getConnection();
 		} catch (Exception e) {
-			throw (new SQLException("Error getting connection from pool[" + this.connectionName + "] lookup ["+this.lookupName+"], " + e.getMessage()));
+			Config.logger.error("Error getting connection from pool/lookup ["+this.lookupName+"], " + e.getMessage(), e);
+			throw (new SQLException("Error getting connection from pool/lookup ["+this.lookupName+"], " + e.getMessage()));
 		}
 		if (defaultDatabase != null) {
 			connection.setCatalog(defaultDatabase);
@@ -45,18 +42,10 @@ public class ConnectionPoolFactoryImpl implements ConnectionFactory {
 
 	protected DataSource getDataSource() throws NamingException {
 		if (this.dataSource == null) {
-			this.dataSource = (DataSource) getEnvCtxA().lookup(this.connectionName);
+			InitialContext initialContext = new InitialContext();
+			this.dataSource = (DataSource) initialContext.lookup(this.lookupName);
 		}
 		return this.dataSource;
-	}
-	
-	public Context getEnvCtxA() throws NamingException {
-		if (this.envCtxA == null) {
-			InitialContext initialContext = new InitialContext();
-			Context envCtxA = (Context) initialContext.lookup(this.lookupName);
-			this.envCtxA = envCtxA;
-		}
-		return this.envCtxA;
 	}
 
 	public void destroy() throws SQLException {
