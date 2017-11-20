@@ -14,12 +14,17 @@ import org.restsql.core.sqlresource.SqlResourceDefinition;
 import org.restsql.core.sqlresource.SqlResourceDefinitionUtils;
 import org.restsql.core.sqlresource.Table;
 
+//import oracle.jdbc.driver.OracleResultSetMetaData;
+
 public class OracleSqlResourceMetaData extends AbstractSqlResourceMetaData {
 
 	private static final String SQL_COLUMNS_QUERY = "select column_name, data_type, data_default from all_tab_columns where owner =  ? and table_name = ?";
 	private static final String SQL_PK_QUERY = "SELECT cols.column_name FROM all_constraints cons, all_cons_columns cols"
 			+ " WHERE cons.owner = ? AND cols.table_name = ?"
 			+ " AND cons.constraint_type = 'P' AND cons.constraint_name = cols.constraint_name ";
+	
+	private static final int TABLE = 0;
+	private static final int FIELD = 1;
 
 	/**
 	 * Retrieves database name from result set meta data. Hook method for buildTablesAndColumns() allows
@@ -41,6 +46,15 @@ public class OracleSqlResourceMetaData extends AbstractSqlResourceMetaData {
 		String columnLabel = resultSetMetaData.getColumnLabel(colNumber);
 		return ConvertFromat.snakeCaseToCamelCase(columnLabel);
 	}
+	
+	/**
+	 * Retrieves actual column label from result set. Hook method for buildJoinTables allows
+	 * database-specific overrides.
+	 */
+	protected String getColumnLabel(ResultSet resultSet) throws SQLException {
+		String columnLable = resultSet.getString(1);
+		return  ConvertFromat.snakeCaseToCamelCase(columnLable);
+	}
 
 	/**
 	 * Retrieves actual column name from result set meta data. Hook method for buildTablesAndColumns() allows
@@ -58,8 +72,26 @@ public class OracleSqlResourceMetaData extends AbstractSqlResourceMetaData {
 	@Override
 	protected String getColumnTableName(final SqlResourceDefinition definition,
 			final ResultSetMetaData resultSetMetaData, final int colNumber) throws SQLException {
-		return definition.getMetadata().getTable().get(0).getName();
+		// return definition.getMetadata().getTable().get(0).getName();
 		// return ((ResultSetMetaData) resultSetMetaData).getTableName(colNumber);
+		String table = recoverTable(definition, colNumber);
+		return table;
+	}
+
+	protected String recoverTable(final SqlResourceDefinition definition, final int colNumber) {
+		return recover(definition, colNumber, TABLE);
+	}
+	protected String recoverField(final SqlResourceDefinition definition, final int colNumber) {
+		return recover(definition, colNumber, FIELD);
+	}
+
+	protected String recover(final SqlResourceDefinition definition, final int colNumber, int i) {
+		String sql = definition.getQuery().getValue().trim().toUpperCase();
+		String campos = sql.substring(sql.indexOf(" "), sql.indexOf("FROM")).trim();
+		String[] split = campos.split(",");
+		
+		String table = split[colNumber - 1].trim().split("\\.")[i];
+		return table;
 	}
 
 	/**
@@ -83,7 +115,9 @@ public class OracleSqlResourceMetaData extends AbstractSqlResourceMetaData {
 	@Override
 	protected String getQualifiedTableName(final SqlResourceDefinition definition,
 			final ResultSetMetaData resultSetMetaData, final int colNumber) throws SQLException {
-		return definition.getMetadata().getDatabase().getDefault() + "." + definition.getMetadata().getTable().get(0).getName();
+//		((oracle.jdbc.driver.OracleResultSetMetaData)resultSetMetaData).getTableName(colNumber);
+//		((oracle.jdbc.internal.OracleResultSetMetaData)resultSetMetaData).getTableName(colNumber);
+		return definition.getMetadata().getDatabase().getDefault() + "." + recoverTable(definition, colNumber);
 	}
 
 	/** Retrieves database-specific table name used in SQL statements. Used to build join table meta data. */

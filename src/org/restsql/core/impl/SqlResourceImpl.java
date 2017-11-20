@@ -138,6 +138,7 @@ public class SqlResourceImpl implements SqlResource {
 
 		try {
 			connection = Factory.getConnection(SqlResourceDefinitionUtils.getDefaultDatabase(definition));
+			connection.setAutoCommit(false);
 			if (metaData.isHierarchical()) {
 				final Request childRequest = Factory.getChildRequest(request);
 				if (request.getChildrenParameters() != null) {
@@ -194,7 +195,15 @@ public class SqlResourceImpl implements SqlResource {
 			}
 			response.addRowsAffected(rowsAffected);
 
+			connection.commit();
 		} catch (final SQLException exception) {
+			if (connection != null) {
+				try {
+					connection.rollback();
+				} catch (SQLException e) {
+					Config.logger.error(e);
+				}
+			}
 			throw new SqlResourceException(exception);
 		} finally {
 			if (connection != null) {
