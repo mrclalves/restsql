@@ -35,10 +35,13 @@ import org.restsql.core.SqlResourceException;
 import org.restsql.core.SqlResourceMetaData;
 import org.restsql.core.TableMetaData;
 import org.restsql.core.TableMetaData.TableRole;
+import org.restsql.core.impl.serial.ConvertFromat;
 import org.restsql.core.sqlresource.Documentation;
 import org.restsql.core.sqlresource.SqlResourceDefinition;
 import org.restsql.core.sqlresource.SqlResourceDefinitionUtils;
 import org.restsql.core.sqlresource.Table;
+
+import oracle.sql.Datum;
 
 /**
  * Represents meta data for sql resource. Queries database for table and column meta data and primary and foreign keys.
@@ -555,11 +558,12 @@ public abstract class AbstractSqlResourceMetaData implements SqlResourceMetaData
 				while (resultSet.next()) {
 					final String columnName = resultSet.getString(1);
 					final ColumnMetaData column = Factory.getColumnMetaData();
+					final String columnLable = getColumnLabel(resultSet); 
 					column.setAttributes(databaseName, qualifiedTableName, tableName, TableRole.Join,
 							columnName,
 							getQualifiedColumnName(tableName, qualifiedTableName, false, columnName),
-							columnName,
-							getQualifiedColumnLabel(tableName, qualifiedTableName, false, columnName),
+							columnLable,
+							getQualifiedColumnLabel(tableName, qualifiedTableName, false, columnLable),
 							resultSet.getString(2));
 					((TableMetaDataImpl) joinTable).addColumn(column);
 				}
@@ -573,6 +577,14 @@ public abstract class AbstractSqlResourceMetaData implements SqlResourceMetaData
 				throw exception;
 			}
 		}
+	}
+
+	/**
+	 * Retrieves actual column label from result set. Hook method for buildJoinTables allows
+	 * database-specific overrides.
+	 */
+	protected String getColumnLabel(ResultSet resultSet) throws SQLException {
+		return resultSet.getString(1);
 	}
 
 	/**
@@ -660,12 +672,14 @@ public abstract class AbstractSqlResourceMetaData implements SqlResourceMetaData
 	 * @throws SQLException if a database access error occurs
 	 * @throws SqlResourceException if definition is invalid
 	 */
-	@SuppressWarnings("fallthrough")
+//	@SuppressWarnings("fallthrough")
 	private void buildTablesAndColumns(final ResultSet resultSet, final Connection connection)
 			throws SQLException, SqlResourceException {
 		final ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
 		final int columnCount = resultSetMetaData.getColumnCount();
 
+		
+		
 		allReadColumns = new ArrayList<ColumnMetaData>(columnCount);
 		parentReadColumns = new ArrayList<ColumnMetaData>(columnCount);
 		childReadColumns = new ArrayList<ColumnMetaData>(columnCount);
