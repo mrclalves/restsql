@@ -24,14 +24,15 @@ public class CorsFilter implements Filter {
 	@Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
 	    HttpServletRequest request = (HttpServletRequest) servletRequest;
-	    System.out.println("Request request.getMethod()");
+	    System.out.println("Request request.getMethod() ["+request.getMethod()+"]");
 
 	    HttpServletResponse resp = (HttpServletResponse) servletResponse;
 	    resp.addHeader("Access-Control-Allow-Origin","*");
 	    resp.addHeader("Access-Control-Allow-Methods","GET,POST");
 	    resp.addHeader("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept");
-	    resp.addHeader("Access-Control-Allow-Credentials", "true");
+	    resp.addHeader("Access-Control-Allow-Credentials", "false");
 	    resp.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+	    resp.addHeader("METODO", request.getMethod());
 	    // Just ACCEPT and REPLY OK if OPTIONS
 	    if ( request.getMethod().equals("OPTIONS") ) {
 	        resp.setStatus(HttpServletResponse.SC_OK);
