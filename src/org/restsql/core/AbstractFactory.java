@@ -72,6 +72,7 @@ public abstract class AbstractFactory {
 				instance = Class.forName(implName).newInstance();
 				return instance;
 			} catch (final Exception exception) {
+				Config.logger.error("Error loading " + interfaceName + " implementation " + implName, exception);
 				throw new RuntimeException("Error loading " + interfaceName + " implementation " + implName,
 						exception);
 			}
