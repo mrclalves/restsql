@@ -30,6 +30,7 @@ public class ConnectionPoolFactoryImpl implements ConnectionFactory {
 		java.sql.Connection connection = null;
 		try {
 			connection = getDataSource().getConnection();
+			connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 		} catch (Exception e) {
 			Config.logger.error("Error getting connection from pool/lookup ["+this.lookupName+"], " + e.getMessage(), e);
 			throw (new SQLException("Error getting connection from pool/lookup ["+this.lookupName+"], " + e.getMessage()));
@@ -41,11 +42,14 @@ public class ConnectionPoolFactoryImpl implements ConnectionFactory {
 	}
 
 	protected DataSource getDataSource() throws NamingException {
-		if (this.dataSource == null) {
-			InitialContext initialContext = new InitialContext();
-			this.dataSource = (DataSource) initialContext.lookup(this.lookupName);
-		}
-		return this.dataSource;
+//		if (this.dataSource == null) {
+//			InitialContext initialContext = new InitialContext();
+//			this.dataSource = (DataSource) initialContext.lookup(this.lookupName);
+//		}
+//		return this.dataSource;
+		InitialContext initialContext = new InitialContext();
+
+		return  (DataSource) initialContext.lookup(this.lookupName);
 	}
 
 	public void destroy() throws SQLException {
