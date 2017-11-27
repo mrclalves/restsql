@@ -20,6 +20,29 @@ public class OracleSqlBuilder extends AbstractSqlBuilder {
 
 	public OracleSqlBuilder() {
 	}
+	
+	/** Creates select SQL. */
+	@Override
+	public SqlStruct buildSelectSql(final SqlResourceMetaData metaData, final String mainSql,
+			final Request request) throws InvalidRequestException {
+		
+		final SqlStruct sql = new SqlStruct(mainSql.length(), DEFAULT_SELECT_SIZE);
+		sql.getMain().append(mainSql);
+		buildSelectSql(metaData, request.getResourceIdentifiers(), sql);
+		buildSelectSql(metaData, request.getParameters(), sql);
+		addOrderBy(metaData, sql);
+
+		// Handle limit and offset
+		if (request.getSelectLimit() != null) {
+			// Call concrete database-specific class to get the limit clause
+			sql.appendToBothClauses(buildSelectLimitSql(request.getSelectLimit().intValue(), request
+					.getSelectOffset().intValue()));
+		}
+
+		sql.compileStatements();
+		return sql;
+	}
+	
 
 	@Override
 	protected String buildSelectLimitSql(int limit, int offset) {
@@ -116,38 +139,42 @@ public class OracleSqlBuilder extends AbstractSqlBuilder {
 					Connection connection = null; 
 					try {
 						connection = Factory.getConnection(tableMetaData.getDatabaseName());
+						Set<String> collectionKey = tableMetaData.getColumns().keySet();
+						for (String keyColumn : collectionKey) {
+							final ColumnMetaData column = tableMetaData.getColumns().get(keyColumn);
+							if (column.isSequence()) {
+								sql.getMain().append(',');
+								sql.appendToBothClauses(",");
+								sql.getMain().append(column.getColumnName()); // since parameter may use column label
+								try {
+									Long id = Factory.getSequenceManager().getNextValue(connection, column.getSequenceName());
+									
+									
+									sql.getClause().append(id);
+									sql.getPreparedClause().append(buildPreparedParameterSql(column));
+									sql.getPreparedValues().add(id);
+									
+									final RequestValue param = new RequestValue(column.getColumnLabel(), id);
+									request.getParameters().add(param);
+								} catch (Exception e) {
+									Config.logger.error("Error get next value sequence ["+column.getSequenceName()+"], " + e.getMessage(), e);
+									throw new InvalidRequestException(e);
+								}
+								
+							}
+						}
 					} catch (Exception e) {
 						Config.logger.error("Error connection database ["+tableMetaData.getDatabaseName()+"], " + e.getMessage(), e);
 						throw new InvalidRequestException(e);
-					} 
-					
-					Set<String> collectionKey = tableMetaData.getColumns().keySet();
-					for (String keyColumn : collectionKey) {
-						final ColumnMetaData column = tableMetaData.getColumns().get(keyColumn);
-						if (column.isSequence()) {
-							sql.getMain().append(',');
-							sql.appendToBothClauses(",");
-							sql.getMain().append(column.getColumnName()); // since parameter may use column label
-							try {
-								Long id = Factory.getSequenceManager().getNextValue(connection, column.getSequenceName());
-								
-								
-								sql.getClause().append(id);
-								sql.getPreparedClause().append(buildPreparedParameterSql(column));
-								sql.getPreparedValues().add(id);
-								
-								final RequestValue param = new RequestValue(column.getColumnLabel(), id);
-								request.getParameters().add(param);
-							} catch (Exception e) {
-								Config.logger.error("Error get next value sequence ["+column.getSequenceName()+"], " + e.getMessage(), e);
-								throw new InvalidRequestException(e);
+					} finally {
+						try {
+							if (connection != null) {
+								connection.close();
 							}
-
+						} catch (Exception e) {
 						}
 					}
-					
 				}
-				
 				
 				sql.getMain().append(')');
 				sql.appendToBothClauses(")");
