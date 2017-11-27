@@ -25,7 +25,7 @@ import org.restsql.core.TableMetaData;
 public abstract class AbstractSqlBuilder implements SqlBuilder {
 	private static final int DEFAULT_DELETE_SIZE = 100;
 	protected static final int DEFAULT_INSERT_SIZE = 300;
-	private static final int DEFAULT_SELECT_SIZE = 300;
+	protected static final int DEFAULT_SELECT_SIZE = 300;
 	private static final int DEFAULT_UPDATE_SIZE = 300;
 
 	// Public methods
@@ -83,7 +83,7 @@ public abstract class AbstractSqlBuilder implements SqlBuilder {
 	// Private helper methods
 
 	/** Adds order by statement . */
-	private void addOrderBy(final SqlResourceMetaData metaData, final SqlStruct sql) {
+	protected void addOrderBy(final SqlResourceMetaData metaData, final SqlStruct sql) {
 		boolean firstColumn = true;
 		firstColumn = addOrderByColumn(metaData, sql, firstColumn, metaData.getParent());
 		addOrderByColumn(metaData, sql, firstColumn, metaData.getChild());
@@ -258,7 +258,7 @@ public abstract class AbstractSqlBuilder implements SqlBuilder {
 		return sqls;
 	}
 
-	private void buildSelectSql(final SqlResourceMetaData metaData, final List<RequestValue> params,
+	protected void buildSelectSql(final SqlResourceMetaData metaData, final List<RequestValue> params,
 			final SqlStruct sql) throws InvalidRequestException {
 		if (params != null && params.size() > 0) {
 			boolean validParamFound = false;
