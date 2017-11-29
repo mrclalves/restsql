@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
 	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="restsql" version="2.5">
-	<display-name>restsql</display-name>
+	<display-name>easyrest</display-name>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
@@ -107,7 +107,7 @@
 	<!-- Configure absolute path to restsql properties file -->
 	<context-param>
 		<param-name>org.restsql.properties</param-name>
-		<param-value>/opt/gsweb/restsql/restsql.properties</param-value>
+		<param-value>/opt/gsweb/easyrest/easyrest.properties</param-value>
 	</context-param>
 
 	<!-- Uncomment security-roles, security-constraints and login-config for authentication/authorization -->
