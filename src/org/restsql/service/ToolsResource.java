@@ -22,7 +22,7 @@ import com.codahale.metrics.Counter;
 @Path("tools")
 public class ToolsResource {
 	private final static String BASE_HTML = "<!DOCTYPE html>\n<html><head><link rel=\"icon\" type=\"image/png\" href=\"../assets/favicon.ico\"/></head><body style=\"font-family:sans-serif\">"
-			+ "<span style=\"font-weight:bold\"><a href=\"../..\">restSQL</a> Tools: Generate Resource Definitions</span><hr/>";
+			+ "<span style=\"font-weight:bold\"><a href=\"../..\">easyREST</a> Tools: Generate Resource Definitions</span><hr/>";
 	private final Counter requestCounter = MonitoringFactory.getMonitoringManager().newCounter(ToolsResource.class, "tools");
 
 	@POST

@@ -33,7 +33,7 @@ public class HttpRequestHelper {
 		try {
 			final List<String> resNames = Factory.getSqlResourceNames();
 			requestBody
-					.append("<span style=\"font-weight:bold\"><a href=\"..\">restSQL</a> SQL Resources</span><hr/>\n");
+					.append("<span style=\"font-weight:bold\"><a href=\"..\">easyREST</a> Resources</span><hr/>\n");
 			if (resNames.size() > 0) {
 				requestBody.append("<table>\n");
 				for (final String resName : resNames) {

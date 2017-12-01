@@ -14,7 +14,7 @@
             <module name="javax.ws.rs.api"/>
             <module name="org.jboss.resteasy.resteasy-jaxrs" />
 			<module name="sun.jdk" />
-			<module name="deployment.restsql.war" />
+			<module name="deployment.easyrest.war" />
 		</dependencies>
 		
 		        <local-last value="true" />
