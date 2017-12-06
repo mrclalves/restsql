@@ -124,6 +124,35 @@ public class RequestLoggerImpl implements org.restsql.core.RequestLogger {
 
 		return string.toString();
 	}
+	private String getAccessInProduction(final int responseCode) {
+		final StringBuffer string = new StringBuffer(300);
+		
+		// Client
+		string.append(httpAttributes.getClient());
+		
+		// Timestamp
+		string.append(' ');
+		string.append(DATE_FORMAT.format(startTime.getTime()));
+		
+		// Method
+		string.append(' ');
+		string.append(httpAttributes.getMethod());
+		
+		// URI
+//		string.append(' ');
+//		string.append(httpAttributes.getUri());
+		
+		// Response Code
+		string.append(' ');
+		string.append(String.valueOf(responseCode));
+		
+		// Elapsed time
+		string.append(' ');
+		string.append(String.valueOf(System.currentTimeMillis() - startTime.getTimeInMillis()));
+		string.append("ms");
+		
+		return string.toString();
+	}
 
 	private String getBriefError(final int responseCode, final Exception exception) {
 		final StringBuffer string = new StringBuffer(300);
@@ -136,7 +165,7 @@ public class RequestLoggerImpl implements org.restsql.core.RequestLogger {
 
 	private void log(final int responseCode, final String responseBody, final Exception exception) {
 		if (accessLogger.isInfoEnabled() || errorLogger.isInfoEnabled() || traceLogger.isInfoEnabled()) {
-			final String access = getAccess(responseCode);
+			final String access = getAccessInProduction(responseCode);
 			if (accessLogger.isInfoEnabled()) {
 				accessLogger.info(access);
 				if (responseCode != 200 && exception != null) {
