@@ -1,6 +1,7 @@
 /* Copyright (c) restSQL Project Contributors. Licensed under MIT. */
 package org.restsql.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,9 @@ public class HttpRequestHelper {
 		requestBody
 				.append("<style>td{padding: 6px} table,tr,td {border-collapse: collapse} tr:nth-child(even){background-color: #f2f2f2} body {font-family:sans-serif}</style></head>\n<body>\n");
 		try {
+			/**
+			 * resources have show only into development
+			 */
 			final List<String> resNames = Factory.getSqlResourceNames();
 			requestBody
 					.append("<span style=\"font-weight:bold\"><a href=\"..\">easyREST</a> Resources</span><hr/>\n");
@@ -91,6 +95,29 @@ public class HttpRequestHelper {
 			requestBody.append(exception.getMessage());
 			requestBody
 					.append(" ... please correct your <code>sqlresources.dir</code> property in your restsql.properties file");
+		}
+		return requestBody;
+	}
+	
+	/** Builds HTML page with SQL Resources and actions for each. Used for /restsql/res and /restsql/conf. */
+	public static StringBuffer buildSqlResourceListingInProduction() {
+		final StringBuffer requestBody = new StringBuffer(500);
+		requestBody
+		.append("<!DOCTYPE html>\n<html><head><link rel=\"icon\" type=\"image/png\" href=\"../assets/favicon.ico\"/>");
+		requestBody
+		.append("<style>td{padding: 6px} table,tr,td {border-collapse: collapse} tr:nth-child(even){background-color: #f2f2f2} body {font-family:sans-serif}</style></head>\n<body>\n");
+		try {
+			/**
+			 * resources have show only into development
+			 */
+			requestBody
+			.append("<span style=\"font-weight:bold\"><a href=\"..\">easyREST</a> Resources</span><hr/>\n")
+			.append("<p> Show only to administrator.<p/>")
+			.append("\n</body>\n</html>");
+		} catch (final Exception exception) {
+			requestBody.append(exception.getMessage());
+			requestBody
+			.append(" ... please correct your <code>sqlresources.dir</code> property in your restsql.properties file");
 		}
 		return requestBody;
 	}
