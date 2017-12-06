@@ -280,8 +280,11 @@ public class Config {
 			try {
 				loggingProperties.backingProperties.load(inputStream);
 				loggingPropertiesFileContent = loggingProperties.toString();
+				
 				printToConsole("INFO: restSQL using logging conf from $WEBAPPS/restsql%s",
 						loggingPropertiesFileName);
+				printToConsole("INFO: restSQL using logging conf from properties: ",
+						loggingProperties.keySet());
 			} catch (final Exception exception) {
 				String message = String.format("error loading logging conf from $WEBAPPS/restsql%s",
 						loggingPropertiesFileName);
