@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.restsql.core.Config;
@@ -164,12 +165,13 @@ public class RequestLoggerImpl implements org.restsql.core.RequestLogger {
 				logger.info(sql);
 			}
 		}
-		logger.info("   response:");
-		if (responseBody != null) {
-			logger.info(responseBody);
-		} else if (exception != null) { // should always be null at this point
-			logger.info(exception.getMessage());
-		}
+//		logger.info("   response:");
+		logger.info("   response: ...");
+//		if (responseBody != null) {
+//			logger.info(responseBody);
+//		} else if (exception != null) { // should always be null at this point
+//			logger.info(exception.getMessage());
+//		}
 		logger.info("---------------------");
 	}
 }
