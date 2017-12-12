@@ -41,7 +41,7 @@ public class SqlResourceFactoryImpl implements SqlResourceFactory {
 	@Override
 	public SqlResource getSqlResource(final String resName) throws SqlResourceFactoryException,
 			SqlResourceException {
-		SqlResource sqlResource = sqlResources.get(resName);
+		SqlResource sqlResource = getSqlResources().get(resName);
 		if (sqlResource == null) {
 			final InputStream inputStream = getInputStream(resName);
 			JAXBContext context;
@@ -54,7 +54,7 @@ public class SqlResourceFactoryImpl implements SqlResourceFactory {
 				final SqlBuilder sqlBuilder = Factory.getSqlBuilder();
 				sqlResource = new SqlResourceImpl(resName, definition, Factory.getSqlResourceMetaData(
 						resName, definition, sqlBuilder), sqlBuilder, new ArrayList<Trigger>());
-				sqlResources.put(resName, sqlResource);
+				getSqlResources().put(resName, sqlResource);
 			} catch (final JAXBException exception) {
 				Config.logger.error("Error unmarshalling SQL Resource "
 						+ getSqlResourceFileName(resName) + " -- " + exception.getMessage(), exception);
@@ -100,7 +100,7 @@ public class SqlResourceFactoryImpl implements SqlResourceFactory {
 
 	/** Returns true if the resource has been loaded, i.e. requested previously. */
 	public boolean isSqlResourceLoaded(final String name) {
-		return sqlResources.containsKey(name);
+		return getSqlResources().containsKey(name);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class SqlResourceFactoryImpl implements SqlResourceFactory {
 	@Override
 	public void reloadSqlResource(final String resName) throws SqlResourceFactoryException,
 			SqlResourceException {
-		sqlResources.remove(resName);
+		getSqlResources().remove(resName);
 		getSqlResource(resName);
 	}
 
@@ -134,7 +134,7 @@ public class SqlResourceFactoryImpl implements SqlResourceFactory {
 
 	/** Opens input stream to resource name. Callers must close stream. */
 	@SuppressWarnings("resource")
-	private InputStream getInputStream(final String resName) throws SqlResourceFactoryException {
+	protected InputStream getInputStream(final String resName) throws SqlResourceFactoryException {
 		final String fileName = getSqlResourceFileName(resName);
 		InputStream inputStream = null;
 		try {
@@ -149,7 +149,7 @@ public class SqlResourceFactoryImpl implements SqlResourceFactory {
 		return inputStream;
 	}
 
-	private String getSqlResourceFileName(final String resName) {
+	protected String getSqlResourceFileName(final String resName) {
 		final StringBuilder fileName = new StringBuilder(128);
 		fileName.append(getSqlResourcesDir());
 		final StringTokenizer tokenizer = new StringTokenizer(resName, ".");
@@ -191,5 +191,9 @@ public class SqlResourceFactoryImpl implements SqlResourceFactory {
 			Config.logger.error(message);
 			throw new SqlResourceFactoryException(message);
 		}
+	}
+
+	protected Map<String, SqlResource> getSqlResources() {
+		return this.sqlResources;
 	}
 }

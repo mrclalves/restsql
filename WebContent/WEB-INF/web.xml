@@ -107,7 +107,8 @@
 	<!-- Configure absolute path to restsql properties file -->
 	<context-param>
 		<param-name>org.restsql.properties</param-name>
-		<param-value>/opt/gsweb/easyrest/easyrest.properties</param-value>
+<!-- 		<param-value>/opt/gsweb/easyrest/easyrest.properties</param-value> -->
+		<param-value>/resources/properties/restsql.properties</param-value>
 	</context-param>
 
 	<!-- Uncomment security-roles, security-constraints and login-config for authentication/authorization -->

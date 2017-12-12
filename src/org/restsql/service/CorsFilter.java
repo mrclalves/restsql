@@ -1,6 +1,7 @@
 package org.restsql.service;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -10,6 +11,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.restsql.core.Factory;
 
 public class CorsFilter implements Filter {
 
@@ -34,16 +37,28 @@ public class CorsFilter implements Filter {
 	    resp.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 	    resp.addHeader("METODO", request.getMethod());
 	    // Just ACCEPT and REPLY OK if OPTIONS
-	    if ( request.getMethod().equals("OPTIONS") ) {
-	        resp.setStatus(HttpServletResponse.SC_OK);
-	        return;
-	    }
-	    chain.doFilter(request, servletResponse);
+	    
+		try {
+			if ( request.getMethod().equals("OPTIONS") ) {
+				resp.setStatus(HttpServletResponse.SC_OK);
+				return;
+			}
+			chain.doFilter(request, servletResponse);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		} finally {
+			try {
+				Factory.getConnectionFactory().destroy();
+			} catch (Exception e) {
+			}
+		}
 	}
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 
 	}
+	
+	
 
 }

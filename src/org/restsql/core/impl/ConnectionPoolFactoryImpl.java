@@ -20,8 +20,6 @@ import org.restsql.core.Factory.ConnectionFactory;
 public class ConnectionPoolFactoryImpl implements ConnectionFactory {
 	private final String lookupName;
 	
-    private DataSource dataSource;
-
 	public ConnectionPoolFactoryImpl() {
 		this.lookupName = Config.properties.getProperty(Config.KEY_DATABASE_DATASOURCE,Config.DEFAULT_DATABASE_DATASOURCE);
 	}
@@ -42,11 +40,6 @@ public class ConnectionPoolFactoryImpl implements ConnectionFactory {
 	}
 
 	protected DataSource getDataSource() throws NamingException {
-//		if (this.dataSource == null) {
-//			InitialContext initialContext = new InitialContext();
-//			this.dataSource = (DataSource) initialContext.lookup(this.lookupName);
-//		}
-//		return this.dataSource;
 		InitialContext initialContext = new InitialContext();
 
 		return  (DataSource) initialContext.lookup(this.lookupName);

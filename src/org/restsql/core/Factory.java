@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.restsql.core.Request.Type;
+import org.restsql.core.impl.AbstractDAO;
 import org.restsql.core.sqlresource.SqlResourceDefinition;
 
 /**
@@ -268,5 +269,9 @@ public class Factory extends AbstractFactory {
 		public SqlResourceFactoryException(final Throwable cause) {
 			super(cause);
 		}
+	}
+
+	public static AbstractDAO getAbstractDAO() {
+		return (AbstractDAO) getInstance(Config.KEY_DATABASE_DAO, Config.DEFAULT_DATABASE_DAO);
 	}
 }
