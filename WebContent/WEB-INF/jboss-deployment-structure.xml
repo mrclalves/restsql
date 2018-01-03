@@ -1,4 +1,4 @@
-<jboss-deployment-structure>
+﻿<jboss-deployment-structure>
 
 	<deployment>
 		<exclude-subsystems>
@@ -14,7 +14,6 @@
             <module name="javax.ws.rs.api"/>
             <module name="org.jboss.resteasy.resteasy-jaxrs" />
 			<module name="sun.jdk" />
-			<module name="deployment.easyrest.war" />
 		</dependencies>
 		
 		        <local-last value="true" />

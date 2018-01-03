@@ -194,13 +194,13 @@ public class RequestLoggerImpl implements org.restsql.core.RequestLogger {
 				logger.info(sql);
 			}
 		}
-//		logger.info("   response:");
-		logger.info("   response: ...");
-//		if (responseBody != null) {
-//			logger.info(responseBody);
-//		} else if (exception != null) { // should always be null at this point
-//			logger.info(exception.getMessage());
-//		}
+//		logger.info("   response: ...");
+		logger.info("   response:");
+		if (responseBody != null) {
+			logger.info(responseBody);
+		} else if (exception != null) { // should always be null at this point
+			logger.info(exception.getMessage());
+		}
 		logger.info("---------------------");
 	}
 }
